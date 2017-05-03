@@ -31,3 +31,25 @@ def only_flow_split_train_validation_by_last_record(train):
 	validation_indexes = set(validation['index'])
 	train_indexes = set(set(train.index) - validation_indexes)
 	return train_indexes, validation_indexes
+
+
+def generate_validation_folds(train_path, path_to_folds):
+    import pandas as pd
+    import numpy as np
+    import datetime
+
+    from scipy.sparse import csr_matrix
+
+    from sklearn.model_selection import train_test_split
+    import feather
+
+    train = pd.read_csv(train_path)
+    train = train[train["listen_type"] == 1]
+
+    temp = train.groupby(["user_id"]).size().reset_index()
+    temp.columns = ["user_id", "n"]
+    train = pd.merge(train, temp)
+
+    for i in range(1,4):
+        feather.write_dataframe(train[train["n"] > i].groupby(["user_id"]).apply(lambda x: x.iloc[-i]), path_to_folds + "/test_{}.feather".format(i))
+        feather.write_dataframe(train[train["n"] > i].groupby(["user_id"]).apply(lambda x: x.iloc[:-i]), path_to_folds + "/train_{}.feather".format(i))
