@@ -33,7 +33,7 @@ def only_flow_split_train_validation_by_last_record(train):
 	return train_indexes, validation_indexes
 
 
-def generate_validation_folds(train_path, path_to_folds):
+def generate_validation_folds(train, path_to_folds):
     import pandas as pd
     import numpy as np
     import datetime
@@ -43,7 +43,6 @@ def generate_validation_folds(train_path, path_to_folds):
     from sklearn.model_selection import train_test_split
     import feather
 
-    train = pd.read_csv(train_path)
     train = train[train["listen_type"] == 1]
 
     temp = train.groupby(["user_id"]).size().reset_index()
