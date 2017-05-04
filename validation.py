@@ -43,12 +43,21 @@ def generate_validation_folds(train, path_to_folds):
     from sklearn.model_selection import train_test_split
     import feather
 
-    train = train[train["listen_type"] == 1]
+    temp = train.groupby(['user_id'])["listen_type"].sum().reset_index()
+    temp.columns = ['user_id', 'n']
+    train = pd.merge(train, temp, how='left', on='user_id')
 
-    temp = train.groupby(["user_id"]).size().reset_index()
-    temp.columns = ["user_id", "n"]
-    train = pd.merge(train, temp)
+    train = train.sort_values(["user_id", "ts_listen"])
 
-    for i in range(1,4):
-        feather.write_dataframe(train[train["n"] > i].groupby(["user_id"]).apply(lambda x: x.iloc[-i]), path_to_folds + "/test_{}.feather".format(i))
-        feather.write_dataframe(train[train["n"] > i].groupby(["user_id"]).apply(lambda x: x.iloc[:-i]), path_to_folds + "/train_{}.feather".format(i))
+    def prepare_train(df, fold):
+        print("Fold {}".format(fold))
+        df_temp = df.copy()
+        temp = df[(df["listen_type"] == 1) & (df["n"] >= fold)].groupby(['user_id']).apply(lambda x: x.iloc[-fold])["ts_listen"].reset_index()
+        temp.columns = ["user_id", "ts_listen_last"]
+        df_temp = pd.merge(df_temp, temp, how='left', on='user_id')
+        df_temp = df_temp[df_temp['ts_listen'] <= df_temp['ts_listen_last']]
+        feather.write_dataframe(df_temp[df_temp["n"] >= fold].groupby(["user_id"]).apply(lambda x: x.iloc[-1]), "folds/test_{}.feather".format(i))
+        feather.write_dataframe(df_temp[df_temp["n"] >= fold].groupby(["user_id"]).apply(lambda x: x.iloc[:-1]), "folds/train_{}.feather".format(i))
+
+    for i in range(1,2):
+        prepare_train(train, i)
