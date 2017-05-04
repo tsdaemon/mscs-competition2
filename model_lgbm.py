@@ -21,8 +21,6 @@ def crossvalidate_model(path_to_folds, cols, params, verbose=1, iterations=3000)
 
 
 def create_submission(train, test, path_to_sample_submission, params, cols, path_to_submission, iterations=3000):
-    train = train[train["listen_type"] == 1]
-
     lgb_train = lgb.Dataset(train[cols], train["is_listened"])
     model_lgm = lgb.train(params, lgb_train, iterations)
 
