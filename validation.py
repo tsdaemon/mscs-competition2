@@ -1,3 +1,12 @@
+import pandas as pd
+import numpy as np
+import datetime
+
+from scipy.sparse import csr_matrix
+
+from sklearn.model_selection import train_test_split
+import feather
+
 def split_train_validation_by_last_record(train):
 	train = train.sort_values(by='ts_listen', axis=0)
 	train['index'] = train.index
@@ -34,15 +43,6 @@ def only_flow_split_train_validation_by_last_record(train):
 
 
 def generate_validation_folds(train, path_to_folds):
-    import pandas as pd
-    import numpy as np
-    import datetime
-
-    from scipy.sparse import csr_matrix
-
-    from sklearn.model_selection import train_test_split
-    import feather
-
     temp = train.groupby(['user_id'])["listen_type"].sum().reset_index()
     temp.columns = ['user_id', 'n']
     train = pd.merge(train, temp, how='left', on='user_id')
