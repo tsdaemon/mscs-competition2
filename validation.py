@@ -56,8 +56,8 @@ def generate_validation_folds(train, path_to_folds):
         temp.columns = ["user_id", "ts_listen_last"]
         df_temp = pd.merge(df_temp, temp, how='left', on='user_id')
         df_temp = df_temp[df_temp['ts_listen'] <= df_temp['ts_listen_last']]
-        feather.write_dataframe(df_temp[df_temp["n"] >= fold].groupby(["user_id"]).apply(lambda x: x.iloc[-1]), "folds/test_{}.feather".format(i))
-        feather.write_dataframe(df_temp[df_temp["n"] >= fold].groupby(["user_id"]).apply(lambda x: x.iloc[:-1]), "folds/train_{}.feather".format(i))
+        feather.write_dataframe(df_temp[df_temp["n"] >= fold].groupby(["user_id"]).apply(lambda x: x.iloc[-1]), path_to_folds + "/test_{}.feather".format(i))
+        feather.write_dataframe(df_temp[df_temp["n"] >= fold].groupby(["user_id"]).apply(lambda x: x.iloc[:-1]), path_to_folds + "/train_{}.feather".format(i))
 
     for i in range(1,2):
         prepare_train(train, i)
