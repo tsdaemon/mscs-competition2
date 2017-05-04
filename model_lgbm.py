@@ -3,7 +3,7 @@ import numpy as np
 import feather
 import lightgbm as lgb
 
-def crossvalidate_model(path_to_folds, cols, params, verbose=1, iterations=1000):
+def crossvalidate_model(path_to_folds, cols, params, verbose=1, iterations=3000):
     
     evs = []
     for i in range(1,4):
@@ -20,11 +20,11 @@ def crossvalidate_model(path_to_folds, cols, params, verbose=1, iterations=1000)
     return evs
 
 
-def create_submission(train, test, path_to_sample_submission, params, cols, path_to_submission):
+def create_submission(train, test, path_to_sample_submission, params, cols, path_to_submission, iterations=3000):
     train = train[train["listen_type"] == 1]
 
     lgb_train = lgb.Dataset(train[cols], train["is_listened"])
-    model_lgm = lgb.train(params, lgb_train, 1000)
+    model_lgm = lgb.train(params, lgb_train, iterations)
 
     lgbm_preds = model_lgm.predict(test[cols])
     submission = pd.read_csv(path_to_sample_submission)
@@ -32,4 +32,11 @@ def create_submission(train, test, path_to_sample_submission, params, cols, path
     submission.to_csv(path_to_submission, index=False)
     return model_lgm.feature_importance()
     
+
+def feature_score(fs, cols):
+    fscore = list(zip(cols, fs))
+    fscore.sort(key=lambda x: x[1])
+    fscore.reverse()
+    return fscore
+
 
