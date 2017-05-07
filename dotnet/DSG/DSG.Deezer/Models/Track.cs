@@ -13,18 +13,23 @@ namespace DSG.Deezer.Models
         [FieldQuoted('"', QuoteMode.OptionalForBoth)]
         public int Id;
 
+        [FieldTrim(TrimMode.Both)]
         [FieldQuoted('"', QuoteMode.OptionalForBoth)]
         public string Title;
 
+        [FieldTrim(TrimMode.Both)]
         [FieldQuoted('"', QuoteMode.OptionalForBoth)]
         public string TitleShort;
 
+        [FieldTrim(TrimMode.Both)]
         [FieldQuoted('"', QuoteMode.OptionalForBoth)]
         public string TitleVersion;
 
+        [FieldTrim(TrimMode.Both)]
         [FieldQuoted('"', QuoteMode.OptionalForBoth)]
         public string Isrc;
 
+        [FieldTrim(TrimMode.Both)]
         [FieldQuoted('"', QuoteMode.OptionalForBoth)]
         public string Link;
 
@@ -51,6 +56,9 @@ namespace DSG.Deezer.Models
 
         [FieldQuoted('"', QuoteMode.OptionalForBoth)]
         public float Gain;
+
+        [FieldHidden]
+        public Track Alternative;
 
         //public Artist Artist;
 

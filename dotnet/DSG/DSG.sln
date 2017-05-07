@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSG.Deezer", "DSG.Deezer\DS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSG.Deezer.Test", "DSG.Deezer.Test\DSG.Deezer.Test.csproj", "{4FB2B589-B462-4A18-AF65-115CC1BC9912}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSG.DownloadMedia", "DSG.DownloadMedia\DSG.DownloadMedia.csproj", "{17F15DBC-D8F4-4852-9646-D75C94D64C0E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{4FB2B589-B462-4A18-AF65-115CC1BC9912}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FB2B589-B462-4A18-AF65-115CC1BC9912}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FB2B589-B462-4A18-AF65-115CC1BC9912}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17F15DBC-D8F4-4852-9646-D75C94D64C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17F15DBC-D8F4-4852-9646-D75C94D64C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17F15DBC-D8F4-4852-9646-D75C94D64C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17F15DBC-D8F4-4852-9646-D75C94D64C0E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

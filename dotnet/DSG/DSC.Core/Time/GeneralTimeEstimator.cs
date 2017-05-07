@@ -49,7 +49,7 @@ namespace DSC.Core.Time
 
         public void Dispose()
         {
-            _watch.Stop();
+            _watch?.Stop();
         }
     }
 }

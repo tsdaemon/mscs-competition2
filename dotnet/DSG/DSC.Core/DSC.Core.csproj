@@ -48,13 +48,14 @@
   <ItemGroup>
     <Compile Include="MediaModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Readers\CsvReader.cs" />
     <Compile Include="Readers\JsonReaderInner.cs" />
     <Compile Include="Time\GeneralTimeEstimator.cs" />
     <Compile Include="Time\ITimeEstimator.cs" />
     <Compile Include="Time\TimeEstimatorByItem.cs" />
     <Compile Include="Utils\ObjectMapper.cs" />
     <Compile Include="Writers\AsyncSaverQueue.cs" />
-    <Compile Include="Writers\CsvFile.cs" />
+    <Compile Include="Writers\CsvFileWriter.cs" />
     <Compile Include="Writers\CsvWriterInner.cs" />
     <Compile Include="Writers\ICanSave.cs" />
   </ItemGroup>

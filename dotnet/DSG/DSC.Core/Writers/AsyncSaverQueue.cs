@@ -17,7 +17,7 @@ namespace DSC.Core.Writers
             _saver = saver;
             _queue = new ConcurrentQueue<T>();
 
-            _thread = new Thread(async () => await Go());
+            _thread = new Thread(Go);
             _thread.Start();
         }
 
@@ -26,13 +26,13 @@ namespace DSC.Core.Writers
             _queue.Enqueue(item);
         }
 
-        private async Task Go()
+        private void Go()
         {
             while (true)
             {
                 var next = GetNext();
 
-                await _saver.SaveOneAsync(next);
+                _saver.SaveOne(next);
             }
         }
 

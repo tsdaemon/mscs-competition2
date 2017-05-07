@@ -8,7 +8,7 @@ namespace DSC.Core.Writers
 {
     public interface ICanSave<in T>
     {
-        Task SaveOneAsync(T item);
-        Task SaveManyAsync(IEnumerable<T> items);
+        void SaveOne(T item);
+        void SaveMany(IEnumerable<T> items);
     }
 }

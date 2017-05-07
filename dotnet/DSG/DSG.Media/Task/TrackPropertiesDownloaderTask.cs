@@ -26,15 +26,15 @@ namespace DSG.Media.Task
         public void Run(string mediaJsonPath, string mediaPropertiesCsvPath, int streams)
         {
             Console.WriteLine($"TrackPropertiesDownloaderTask started. Output: {mediaPropertiesCsvPath}. Initializing saver...");
-            var csvFile = new CsvFile<Track>(mediaPropertiesCsvPath);
+            var csvFile = new CsvFileWriter<Track>(mediaPropertiesCsvPath);
             _asyncSaverQueue = new AsyncSaverQueue<Track>(csvFile);
 
             Console.WriteLine($"Saver intialized. Reading already processed indexes...");
-            var alreadyProcessed = GetAlreadyProcessed(mediaPropertiesCsvPath).ToArray();
+            var alreadyProcessed = GetAlreadyProcessed(mediaPropertiesCsvPath).ToDictionary(i => i, i => i);
 
-            Console.WriteLine($"Already processed: {alreadyProcessed.Length}. Reading mediadump {mediaJsonPath}...");
+            Console.WriteLine($"Already processed: {alreadyProcessed.Count}. Reading mediadump {mediaJsonPath}...");
             var medias = JsonReaderInner.ReadMongoDump<MediaModel>(mediaJsonPath)
-                .Where(m => !alreadyProcessed.Contains(m.MediaId))
+                .Where(m => !alreadyProcessed.ContainsKey(m.MediaId))
                 .ToArray();
 
             Console.WriteLine($"Read {medias.Length} media items. Preparing work items...");
@@ -43,8 +43,6 @@ namespace DSG.Media.Task
                     .GroupBy(x => x.MediaId % streams)
                     .Select<IGrouping<int, MediaModel>, Action>(batch => () => ProcessBatch(batch, timeEstimator))
                     .ToArray();
-
-            
 
             Console.WriteLine($"Prepared {streams} work items. Processing in parallel...");
             var thread = new Thread(() => Parallel.Invoke(workItems));
@@ -97,13 +95,11 @@ namespace DSG.Media.Task
         {
             var track = _deezerClient.GetTrack(item.MediaId);
             if (track == null) return;
-
-            //var mediaModel = new MediaModelExtended();
-
-            //mediaModel.MapWithPrefix(track, "Media");
-            //mediaModel.MapWithPrefix(track.Album, "Album");
-            //mediaModel.MapWithPrefix(track.Artist, "Artist");
-
+            if (string.IsNullOrEmpty(track.Preview) && track.Alternative != null)
+            {
+                track.Preview = track.Alternative.Preview;
+            }
+            
             _asyncSaverQueue.Save(track);
         }
     }

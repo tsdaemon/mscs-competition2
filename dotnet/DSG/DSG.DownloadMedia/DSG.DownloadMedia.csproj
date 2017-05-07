@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F50467A2-3035-46D6-95DF-84E104161569}</ProjectGuid>
+    <ProjectGuid>{17F15DBC-D8F4-4852-9646-D75C94D64C0E}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>DSG.Media</RootNamespace>
-    <AssemblyName>DSG.Media</AssemblyName>
+    <RootNamespace>DSG.DownloadMedia</RootNamespace>
+    <AssemblyName>DSG.DownloadMedia</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -32,12 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
-    </Reference>
-    <Reference Include="FileHelpers, Version=3.1.5.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
-      <HintPath>..\packages\FileHelpers.3.1.5\lib\net45\FileHelpers.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -50,11 +44,10 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Task\TrackPropertiesDownloaderTask.cs" />
+    <Compile Include="Task\TrackPreviewDownloaderTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DSC.Core\DSC.Core.csproj">
@@ -62,10 +55,9 @@
       <Name>DSC.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\DSG.Deezer\DSG.Deezer.csproj">
-      <Project>{736066B4-036C-4AA8-8A2B-D030ACF25FEA}</Project>
+      <Project>{736066b4-036c-4aa8-8a2b-d030acf25fea}</Project>
       <Name>DSG.Deezer</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
