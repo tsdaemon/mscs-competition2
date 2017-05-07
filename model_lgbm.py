@@ -3,21 +3,26 @@ import numpy as np
 import feather
 import lightgbm as lgb
 
-def crossvalidate_model(path_to_folds, cols, params, verbose=1, iterations=1000):
+def crossvalidate_model(path_to_folds, cols, params, verbose=1, iterations=1000, validate_on_both=False):
     
     evs = []
+    importance = None
     for i in range(1,2):
         train = feather.read_dataframe(path_to_folds + "/train_{}.feather".format(i))
         test = feather.read_dataframe(path_to_folds + "/test_{}.feather".format(i))
         lgb_train = lgb.Dataset(train[cols], train["is_listened"])
         lgb_test = lgb.Dataset(test[cols], test["is_listened"])
         evals = {}
-        model_lgm = lgb.train(params, lgb_train, iterations, valid_sets=lgb_test, verbose_eval=verbose, evals_result=evals)
+        validation = lgb_test
+        if(validate_on_both):
+            validation = [lgb_train,lgb_test]
+        model_lgm = lgb.train(params, lgb_train, iterations, valid_sets=validation, verbose_eval=verbose, evals_result=evals)
         if(verbose):
             print(evals["valid_0"]["auc"][-1])
         evs.append(evals["valid_0"]["auc"][-1])
+        importance = model_lgm.feature_importance()
 
-    return evs
+    return evs,importance
 
 
 def create_submission(train, test, path_to_sample_submission, params, cols, path_to_submission, verbose=1, iterations=1000):

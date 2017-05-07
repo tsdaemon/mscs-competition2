@@ -7,13 +7,18 @@ namespace DSC.Core.Readers
 {
     public class JsonReaderInner
     {
-        public static IEnumerable<T> ReadMongoDump<T>(string fileName) where T:new()
+        public static IEnumerable<T> ReadMongoDump<T>(string fileName, int offset = 0) where T:new()
         {
             using (var rs = new StreamReader(File.OpenRead(fileName)))
             {
-                while (rs.EndOfStream)
+                while (!rs.EndOfStream)
                 {
                     var line = rs.ReadLine();
+                    if (offset > 0)
+                    {
+                        offset--;
+                        continue;
+                    }
                     yield return JsonConvert.DeserializeObject<T>(line);
                 }
             }

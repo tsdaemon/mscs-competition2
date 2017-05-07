@@ -10,53 +10,97 @@ namespace DSG.Media.Models
     [DelimitedRecord(",")]
     public class MediaModelExtended
     {
-        public int MediaId { get; set; }
-        public string MediaTitle { get; set; }
-        public string MediaTitleShort { get; set; }
-        public string MediaTitleVersion { get; set; }
-        public string MediaIsrc { get; set; }
-        public string MediaUrl { get; set; }
-        public int MediaPosition { get; set; }
-        public int MediaDiskNumber { get; set; }
-        public int MediaRank { get; set; }
-        public bool MediaExplicitLyrics { get; set; }
-        public string MediaPreview { get; set; }
-        public float MediaBpm { get; set; }
-        public float MediaGain { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int MediaId;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string MediaTitle;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string MediaTitleShort;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string MediaTitleVersion;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string MediaIsrc;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string MediaLink;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int MediaDuration;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int MediaTrackPosition;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int MediaDiskNumber;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int MediaRank;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public bool MediaExplicitLyrics;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string MediaPreview;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public float MediaBpm;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public float MediaGain;
 
-        public string MediaAvailableCountriesExp { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string MediaAvailableCountriesExp;
 
-        public int AlbumId { get; set; }
-        public string AlbumTitle { get; set; }
-        public string AlbumUpc { get; set; }
-        public string AlbumLink { get; set; }
-        public string AlbumCover { get; set; }
-        public string AlbumCoverSmall { get; set; }
-        public string AlbumCoverMedium { get; set; }
-        public string AlbumCoverBig { get; set; }
-        public string AlbumCoverXl { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int AlbumId;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string AlbumTitle;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string AlbumUpc;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string AlbumLink;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string AlbumCover;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string AlbumCoverSmall;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string AlbumCoverMedium;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string AlbumCoverBig;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string AlbumCoverXl;
 
-        public string AlbumGenresExp { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string AlbumGenresExp;
 
-        public string AlbumLabel { get; set; }
-        public int AlbumNbTracks { get; set; }
-        public int AlbumDuration { get; set; }
-        public int AlbumFans { get; set; }
-        public int AlbumRating { get; set; }
-        public string AlbumRecordType { get; set; }
-        public bool AlbumAvailable { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string AlbumLabel;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int AlbumNbTracks;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int AlbumDuration;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int AlbumFans;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int AlbumRating;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string AlbumRecordType;
 
-        public int ArtistId { get; set; }
-        public string ArtistName { get; set; }
-        public string ArtistLink { get; set; }
-        public string ArtistPicture { get; set; }
-        public string ArtistPictureSmall { get; set; }
-        public string ArtistPictureMedium { get; set; }
-        public string ArtistPictureBig { get; set; }
-        public string ArtistPictureXl { get; set; }
-        public int ArtistNbAlbum { get; set; }
-        public int ArtistNbFans { get; set; }
-        public bool ArtistRadio { get; set; }
-        public string ArtistTracklist { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int ArtistId;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string ArtistName;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string ArtistLink;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string ArtistPicture;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string ArtistPictureSmall;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string ArtistPictureMedium;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string ArtistPictureBig;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string ArtistPictureXl;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int ArtistNbAlbum;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int ArtistNbFans;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public bool ArtistRadio;
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string ArtistTracklist;
     }
+
 }

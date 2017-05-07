@@ -3,41 +3,57 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FileHelpers;
 
 namespace DSG.Deezer.Models
 {
+    [DelimitedRecord(",")]
     public class Track
     {
-        public int Id { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int Id;
 
-        public string Title { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string Title;
 
-        public string TitleShort { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string TitleShort;
 
-        public string TitleVersion { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string TitleVersion;
 
-        public string Isrc { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string Isrc;
 
-        public string Url { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string Link;
 
-        public int Position { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int Duration;
 
-        public int DiskNumber { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int TrackPosition;
 
-        public int Rank { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int DiskNumber;
 
-        public bool ExplicitLyrics { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public int Rank;
 
-        public string Preview { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public bool ExplicitLyrics;
 
-        public float Bpm { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public string Preview;
 
-        public float Gain { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public float Bpm;
 
-        public string[] AvailableCountries { get; set; }
+        [FieldQuoted('"', QuoteMode.OptionalForBoth)]
+        public float Gain;
 
-        public Artist Artist { get; set; }
+        //public Artist Artist;
 
-        public Album Album { get; set; }
+        //public Album Album;
     }
 }

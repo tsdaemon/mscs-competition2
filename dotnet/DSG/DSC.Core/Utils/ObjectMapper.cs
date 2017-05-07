@@ -10,7 +10,7 @@
             foreach(var pr in srcType.GetProperties())
             {
                 var val = pr.GetValue(source);
-                var pr2 = destType.GetProperty($"{prefix}{pr.Name}");
+                var pr2 = destType.GetField($"{prefix}{pr.Name}");
                 if(pr2 != null)
                     pr2.SetValue(destination, val);
             }
