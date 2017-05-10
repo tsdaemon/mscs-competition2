@@ -17,9 +17,8 @@ def crossvalidate_model(path_to_folds, cols, params, verbose=1, iterations=1000,
         if(validate_on_both):
             validation = [lgb_train,lgb_test]
         model_lgm = lgb.train(params, lgb_train, iterations, valid_sets=validation, verbose_eval=verbose, evals_result=evals)
-        if(verbose):
-            print(evals["valid_0"]["auc"][-1])
-        evs.append(evals["valid_0"]["auc"][-1])
+        key = "valid_1" if(validate_on_both) else "valid_0"
+        evs.append(evals[key]["auc"][-1])
         importance = model_lgm.feature_importance()
 
     return evs,importance

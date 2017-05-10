@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DSC.Core.Readers;
 using DSC.Core.Time;
-using DSG.Deezer.Models;
+using Polly;
 
 namespace DSG.DownloadMedia.Task
 {
@@ -20,8 +20,8 @@ namespace DSG.DownloadMedia.Task
             var downloadedIds = GetDownloaded(previewsDirectory).ToDictionary(i => i);
 
             Console.WriteLine($"Already downloaded: {downloadedIds.Count}. Reading tracks file {mediaPropertiesCsvPath} for urls...");
-            var tracks = CsvReader.ReadCsv<Track>(mediaPropertiesCsvPath)
-                .Where(t => !downloadedIds.ContainsKey(t.Id))
+            var tracks = CsvReader.FuckingReadFuckingUrlsCsv(mediaPropertiesCsvPath)
+                .Where(t => !downloadedIds.ContainsKey(t.Item1))
                 .ToArray();
 
             if (clusterSplit.HasValue && clusters.HasValue)
@@ -31,14 +31,14 @@ namespace DSG.DownloadMedia.Task
                 var ourBatchesEnd = (clusterSplit + 1) * streams;
                 Console.WriteLine(
                     $"Processing cluster {clusterSplit} from {clusters} clusters. Batches from {ourBatchesStart} to {ourBatchesEnd}.");
-                tracks = tracks.Where(i => i.Id % allStreams >= ourBatchesStart && i.Id % allStreams < ourBatchesEnd)
+                tracks = tracks.Where(i => i.Item1 % allStreams >= ourBatchesStart && i.Item1 % allStreams < ourBatchesEnd)
                         .ToArray();
             }
 
-            Console.WriteLine($"Read {tracks.Length} downloaded files. Preparing work items...");
+            Console.WriteLine($"Read {tracks.Length} preview urls. Preparing work items...");
             var timeEstimator = new GeneralTimeEstimator(tracks.Length);
             var workItems = GetGrouping(tracks, streams, clusterSplit, clusters)
-                    .Select<IGrouping<int, Track>, Action>(batch => () => ProcessBatch(batch, timeEstimator, previewsDirectory))
+                    .Select<IGrouping<int, Tuple<int, string>>, Action>(batch => () => ProcessBatch(batch, timeEstimator, previewsDirectory))
                     .ToArray();
 
             Console.WriteLine($"Prepared {streams} batches. Processing in parallel...");
@@ -65,16 +65,16 @@ namespace DSG.DownloadMedia.Task
             timeEstimator.Dispose();
         }
 
-        private IEnumerable<IGrouping<int, Track>> GetGrouping(IEnumerable<Track> items, int streams, int? clusterSplit, int? clusters)
+        private IEnumerable<IGrouping<int, Tuple<int, string>>> GetGrouping(IEnumerable<Tuple<int, string>> items, int streams, int? clusterSplit, int? clusters)
         {
             if (clusterSplit.HasValue && clusters.HasValue)
             {
                 var allStreams = streams * clusters;
-                return items.GroupBy(i => i.Id % allStreams.Value);
+                return items.GroupBy(i => i.Item1 % allStreams.Value);
             }
             else
             {
-                return items.GroupBy(i => i.Id % streams);
+                return items.GroupBy(i => i.Item1 % streams);
             }
         }
 
@@ -92,7 +92,15 @@ namespace DSG.DownloadMedia.Task
                 $"Processed {status.Item2} of {status.Item3}. Time left: {TimeSpan.FromMilliseconds(status.Item1)}");
         }
 
-        private void ProcessBatch(IGrouping<int, Track> batch, ITimeEstimator estimator, string saveTo)
+        private Policy policy =>
+                Policy.Handle<WebException>()
+                    .WaitAndRetry(new[]{
+                        new TimeSpan(0,0,10),
+                        new TimeSpan(0,0,10),
+                        new TimeSpan(0,0,10)
+                    });
+
+        private void ProcessBatch(IGrouping<int, Tuple<int, string>> batch, ITimeEstimator estimator, string saveTo)
         {
             Console.WriteLine($"Started batch {batch.Key}.");
             foreach (var item in batch)
@@ -102,16 +110,23 @@ namespace DSG.DownloadMedia.Task
                     Console.WriteLine($"Batch {batch.Key} stopped.");
                     break;
                 }
-                estimator.ExecuteItem(() => ProcessItem(item, saveTo));
+                try
+                {
+                    estimator.ExecuteItem(() => policy.Execute(() => ProcessItem(item, saveTo)));
+                }
+                catch(WebException)
+                {
+                    
+                }
             }
         }
 
-        private void ProcessItem(Track item, string saveTo)
+        private void ProcessItem(Tuple<int, string> item, string saveTo)
         {
-            if (string.IsNullOrEmpty(item.Preview) || !Uri.IsWellFormedUriString(item.Preview, UriKind.Absolute)) return;
+            if (string.IsNullOrEmpty(item.Item2) || !Uri.IsWellFormedUriString(item.Item2, UriKind.Absolute)) return;
 
-            var url = item.Preview;
-            string fileName = $"{saveTo}/{item.Id}.mp3";
+            var url = item.Item2;
+            string fileName = $"{saveTo}/{item.Item1}.mp3";
 
             // Create a new WebClient instance.
             using (var webClient = new WebClient())
