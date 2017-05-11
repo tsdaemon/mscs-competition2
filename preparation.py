@@ -6,6 +6,17 @@ def minimal_entries_by_user(df, min):
 	del df['user_id_count']
 	return df
 
+def remove_first_value_for_all(df):
+    df = df.sort_values(by=['user_id','ts_listen'], axis=0)
+    df['index'] = df.index
+    
+    first_index = df.groupby('user_id', as_index=False).agg({'index':'first'})['index']
+    df = df[~df.index.isin(first_index)]
+    
+    del df['index']
+    df = df.sort_index()
+    return df
+
 
 def remove_percent_entries_for_users_who_have_to_much(df, max, p):
 	
