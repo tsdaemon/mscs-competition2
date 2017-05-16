@@ -40,7 +40,7 @@ def crossvalidate_model_by_index(df, train_index, validation_index, cols, params
     evs.append(evals[key]["auc"][-1])
     importance = model_lgm.feature_importance()
 
-    return evs, importance
+    return evs, importance, model_lgm
 
 
 def create_submission(train, test, path_to_sample_submission, params, cols, path_to_submission, verbose=1, iterations=1000):
@@ -51,7 +51,7 @@ def create_submission(train, test, path_to_sample_submission, params, cols, path
     submission = pd.read_csv(path_to_sample_submission)
     submission["is_listened"] = lgbm_preds
     submission.to_csv(path_to_submission, index=False)
-    return model_lgm.feature_importance(), lgbm_preds
+    return model_lgm.feature_importance(), lgbm_preds, model_lgm
     
 
 def feature_score(fs, cols):
